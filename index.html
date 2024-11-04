@@ -5,7 +5,7 @@
    <meta charset="UTF-8">
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
    <title>GitHub Site - Bank API</title>
-   <meta http-equiv="Content-Security-Policy" content="default-src 'self';">
+   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'nonce-abc123';">
 </head>
 
 <body>
@@ -17,14 +17,13 @@
       <ul id="log"></ul>
    </div>
 
-   <script>
+   <script nonce="abc123">
       const log = document.getElementById('log');
 
       window.addEventListener('message', (event) => {
          if (event.origin === 'https://iframe-netlify-test.netlify.app') {
             logMessage(`Received from Netlify: ${JSON.stringify(event.data)}`);
 
-            // Create a mock response to represent payment status
             const response = {
                type: 'PAYMENT_STATUS',
                status: 'SUCCESS',
@@ -38,7 +37,6 @@
                }
             };
 
-            // Send response back to Netlify iframe
             window.parent.postMessage(response, 'https://iframe-netlify-test.netlify.app');
             logMessage(`Sent: ${JSON.stringify(response)}`);
          } else {
