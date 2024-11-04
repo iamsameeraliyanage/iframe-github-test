@@ -4,56 +4,15 @@
 <head>
    <meta charset="UTF-8">
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-   <title>GitHub Site - Bank API</title>
-   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'nonce-abc123';">
+   <title>GitHub Site</title>
+   <!-- Basic CSP to allow resources only from self and required origins -->
+   <meta http-equiv="Content-Security-Policy" content="default-src 'self';">
 </head>
 
 <body>
-   <h1>GitHub Site - Bank API</h1>
+   <h1>GitHub Site</h1>
 
-   <!-- Communication Log -->
-   <div id="communication-log">
-      <h3>Communication Log:</h3>
-      <ul id="log"></ul>
-   </div>
-
-   <script nonce="abc123">
-      const log = document.getElementById('log');
-
-      window.addEventListener('message', (event) => {
-         if (event.origin === 'https://iframe-netlify-test.netlify.app') {
-            logMessage(`Received from Netlify: ${JSON.stringify(event.data)}`);
-
-            const response = {
-               type: 'PAYMENT_STATUS',
-               status: 'SUCCESS',
-               data: {
-                  transactionId: generateId('TXN'),
-                  timestamp: new Date().toISOString(),
-                  amount: event.data.data.amount,
-                  currency: event.data.data.currency,
-                  orderId: event.data.data.orderId,
-                  processingId: generateId('PROC')
-               }
-            };
-
-            window.parent.postMessage(response, 'https://iframe-netlify-test.netlify.app');
-            logMessage(`Sent: ${JSON.stringify(response)}`);
-         } else {
-            console.warn("Untrusted message origin:", event.origin);
-         }
-      });
-
-      function generateId(prefix) {
-         return `${prefix}-${Math.random().toString(36).substr(2, 10)}`;
-      }
-
-      function logMessage(message) {
-         const item = document.createElement('li');
-         item.textContent = message;
-         log.appendChild(item);
-      }
-   </script>
+   <script src="script.js"></script>
 </body>
 
 </html>
