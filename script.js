@@ -1,3 +1,5 @@
+const communicationLog = document.getElementById('communication-log');
+
 window.addEventListener('message', (event) => {
     if (event.origin === 'https://iframe-netlify-test.netlify.app') {
         if (event.data.action === 'process-payment') {
@@ -16,6 +18,9 @@ window.addEventListener('message', (event) => {
                     processingId: `PROC-${Math.random().toString(36).substring(2, 10)}`
                 }
             };
+
+            // Log the payment processed message
+            communicationLog.innerHTML += `<br>GitHub: Payment processed: ${JSON.stringify(responseData)}`;
 
             // Send response back to Netlify iframe
             try {
