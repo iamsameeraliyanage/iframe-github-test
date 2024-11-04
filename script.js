@@ -1,13 +1,25 @@
 window.addEventListener('message', (event) => {
-    // Verify the origin of the message to ensure it's from the trusted Netlify site
     if (event.origin === 'https://iframe-netlify-test.netlify.app') {
-        if (event.data.action === 'send-data') {
-            // Prepare data to send back to Netlify iframe
-            const data = { message: 'Hello from GitHub iframe' };
-            
+        if (event.data.action === 'process-payment') {
+            const paymentData = event.data.data;
+
+            // Simulate processing the payment and generating a response
+            const responseData = {
+                type: "PAYMENT_STATUS",
+                status: "SUCCESS",
+                data: {
+                    transactionId: `TXN-${Math.random().toString(36).substring(2, 10)}`,
+                    timestamp: new Date().toISOString(),
+                    amount: paymentData.amount,
+                    currency: paymentData.currency,
+                    orderId: paymentData.orderId,
+                    processingId: `PROC-${Math.random().toString(36).substring(2, 10)}`
+                }
+            };
+
+            // Send response back to Netlify iframe
             try {
-                // Send data back to Netlify with the target origin specified
-                window.parent.postMessage(data, 'https://iframe-netlify-test.netlify.app');
+                window.parent.postMessage(responseData, 'https://iframe-netlify-test.netlify.app');
             } catch (error) {
                 console.error("Failed to send message to Netlify iframe:", error);
             }
