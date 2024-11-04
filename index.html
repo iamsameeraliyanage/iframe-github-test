@@ -1,7 +1,27 @@
- 
-<html>
-   <head></head>
-   <body>
-      <h1>Hello Github Pages</h1>
-   </body>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>GitHub Site</title>
+</head>
+
+<body>
+   <h1>GitHub Site</h1>
+
+   <script>
+      window.addEventListener('message', (event) => {
+         if (event.origin === 'https://iframe-netlify-test.netlify.app') {
+            if (event.data.action === 'send-data') {
+               // Prepare and send data back to Netlify
+               const data = { message: 'Hello from GitHub iframe' };
+               window.parent.postMessage(data, 'https://iframe-netlify-test.netlify.app');
+            }
+         }
+      });
+
+   </script>
+</body>
+
 </html>
