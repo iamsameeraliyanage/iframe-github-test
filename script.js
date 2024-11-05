@@ -5,29 +5,31 @@ window.addEventListener('message', (event) => {
         if (event.data.action === 'process-payment') {
             const paymentData = event.data.data;
 
-            // Simulate processing the payment and generating a response
-            const responseData = {
-                type: "PAYMENT_STATUS",
-                status: "SUCCESS",
-                data: {
-                    transactionId: `TXN-${Math.random().toString(36).substring(2, 10)}`,
-                    timestamp: new Date().toISOString(),
-                    amount: paymentData.amount,
-                    currency: paymentData.currency,
-                    orderId: paymentData.orderId,
-                    processingId: `PROC-${Math.random().toString(36).substring(2, 10)}`
+            // Simulate processing the payment and generating a response after 5 seconds
+            setTimeout(() => {
+                const responseData = {
+                    type: "PAYMENT_STATUS",
+                    status: "SUCCESS",
+                    data: {
+                        transactionId: `TXN-${Math.random().toString(36).substring(2, 10)}`,
+                        timestamp: new Date().toISOString(),
+                        amount: paymentData.amount,
+                        currency: paymentData.currency,
+                        orderId: paymentData.orderId,
+                        processingId: `PROC-${Math.random().toString(36).substring(2, 10)}`
+                    }
+                };
+
+                // Log the payment processed message
+                communicationLog.innerHTML += `<br>GitHub: Payment processed: ${JSON.stringify(responseData)}`;
+
+                // Send response back to Netlify iframe
+                try {
+                    window.parent.postMessage(responseData, 'https://iframe-netlify-test.netlify.app');
+                } catch (error) {
+                    console.error("Failed to send message to Netlify iframe:", error);
                 }
-            };
-
-            // Log the payment processed message
-            communicationLog.innerHTML += `<br>GitHub: Payment processed: ${JSON.stringify(responseData)}`;
-
-            // Send response back to Netlify iframe
-            try {
-                window.parent.postMessage(responseData, 'https://iframe-netlify-test.netlify.app');
-            } catch (error) {
-                console.error("Failed to send message to Netlify iframe:", error);
-            }
+            }, 5000);
         }
     } else {
         console.warn("Untrusted message origin:", event.origin);
